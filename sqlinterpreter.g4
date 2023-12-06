@@ -3,25 +3,42 @@ root : consulta SEMICOLON      // l'etiqueta ja és root
      ;
 
 consulta: selection ;
-selection: SELECT campos tables (order)?;
+selection: SELECT campos tables (where)? (order)?;
 order: ORDER BY preferencia ( COMA preferencia)*;
 preferencia : NAME op=(ASC | DES)?;
 tables: FROM NAME;
 campos: campo (COMA campo)*;
 campo : campo2 (AS NAME)?;
+where: WHERE condition;
 
-campo2: PAROP campo2 PARCL #paretesis
-      | campo2 (MUL | DIV) num #mulDiv
-      | num (MUL | DIV) campo2 #mulDiv
+condition: PAROP condition PARCL #paretesis2
+         | condition op=(LT|LE|GT|GE|EQ|NEQ) condition #booleanCondition
+         | NOT condition #not
+         | condition op=AND condition #booleanCondition
+         | condition op=OR condition #booleanCondition
+         | COMILLAS NAME COMILLAS #string
+         | campo2 #columna
+         ;
+
+campo2: MINUS campo2 #minus 
+      | PAROP campo2 PARCL #paretesis
       | campo2 (MUL | DIV) campo2 #mulDiv
-      | campo2 (SUMA | MINUS) num #sumMinus
-      | num (SUMA | MINUS) campo2 #sumMinus
       | campo2 (SUMA | MINUS) campo2 #sumMinus
+      | num #numero
       | nombre=(NAME|MUL) #column
 ;
 
-num: NUM;
+num:op=(SUMA|MINUS)? NUM;
 
+LT: '<';
+LE: '<=';
+GT: '>';
+GE: '>=';
+EQ:'=';
+NEQ:'!=';
+NOT: 'not';
+AND: 'and';
+OR:'or';
 SUMA: '+';
 MINUS: '-'; 
 MUL: '*';
@@ -31,12 +48,14 @@ PARCL: ')';
 SELECT : 'select';
 FROM : 'from';
 SEMICOLON :';';
+WHERE: 'where';
 ORDER: 'order';
 BY : 'by';
 ASC: 'asc';
 DES: 'desc';
 COMA: ',';
 AS: 'as';
+COMILLAS: '"';
 NAME : (CHARACTER (CHARACTER|[0-9])*);
 
 NUM: [0-9]+ ('.'[0-9]+)?;
