@@ -87,15 +87,8 @@ class evalVisitor(sqlinterpreterVisitor):
 
     def visitIsin(self, ctx: sqlinterpreterParser.IsinContext):
         columna = self.visit(ctx.campo2())
-        print(columna)
-        print("He llegado Aqui")
         df = evalVisitor().visit(ctx.consulta())
-        l = []
-        for value in columna.values.tolist():
-            if value in df.values:
-                l.append(True)
-            else:
-                l.append(False)
+        l = columna.isin(df.values.flatten())
         return l
 
     def visitParetesis2(self, ctx: sqlinterpreterParser.Paretesis2Context):
