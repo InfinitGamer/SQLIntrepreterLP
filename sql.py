@@ -30,7 +30,7 @@ class evalVisitor(sqlinterpreterVisitor):
     
     def visitConsulta(self, ctx:sqlinterpreterParser.ConsultaContext):
         self.visit(ctx.selection())
-        return self.currentState
+        st.table(self.currentState)
     
 
     def visitSelection(self, ctx:sqlinterpreterParser.SelectionContext):
@@ -187,4 +187,4 @@ if button:
     if parser.getNumberOfSyntaxErrors() == 0:
         visitor = evalVisitor()
         df = visitor.visit(tree)
-        st.table(df)
+        
