@@ -28,12 +28,19 @@ class evalVisitor(sqlinterpreterVisitor):
             'or': lambda x, y: x | y
         }
 
-    def visitRoot(self, ctx: sqlinterpreterParser.RootContext):
-        return self.visit(ctx.consulta())
+    def visitConsult(self, ctx:sqlinterpreterParser.ConsultContext):
+        df =self.visit(ctx.consulta())
+        st.table(df)
 
+    def visitAssign(self, ctx:sqlinterpreterParser.AssignContext):
+        df =self.visit(ctx.consulta())
+        name = ctx.NAME().getText()
+        st.session_state[name] = df.copy()
+        st.table(df)
+    
     def visitConsulta(self, ctx: sqlinterpreterParser.ConsultaContext):
         self.visit(ctx.selection())
-        st.table(self.currentState)
+        return self.currentState
 
     def visitSelection(self, ctx: sqlinterpreterParser.SelectionContext):
         self.visit(ctx.tables())
@@ -94,11 +101,14 @@ class evalVisitor(sqlinterpreterVisitor):
 
     def visitTable(self, ctx: sqlinterpreterParser.TableContext):
         tabla = ctx.NAME().getText()
-
-        path = "./tablas/"
-        path = path + tabla + ".csv"
-        df = pd.read_csv(path)
-        return df
+        try:
+            path = "./tablas/"
+            path = path + tabla + ".csv"
+            df = pd.read_csv(path)
+            return df
+        except FileNotFoundError as e:
+            df = st.session_state[tabla]
+            return df
 
     def visitTables(self, ctx: sqlinterpreterParser.TablesContext):
         df = self.visit(ctx.table())

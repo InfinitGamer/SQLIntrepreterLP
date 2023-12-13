@@ -1,5 +1,6 @@
 grammar sqlinterpreter;
-root : consulta SEMICOLON      // l'etiqueta ja és root
+root : consulta SEMICOLON   #consult
+     | NAME ASSIGN consulta SEMICOLON #assign                 
      ;
 
 consulta: selection ;
@@ -36,6 +37,7 @@ LT: '<';
 LE: '<=';
 GT: '>';
 GE: '>=';
+ASSIGN :':=';
 EQ:'=';
 NEQ:'!=';
 NOT: 'not';
