@@ -37,7 +37,11 @@ class evalVisitor(sqlinterpreterVisitor):
         name = ctx.NAME().getText()
         st.session_state[name] = df.copy()
         st.table(df)
-    
+
+    def visitPlot(self, ctx:sqlinterpreterParser.PlotContext):
+        name = ctx.NAME().getText()
+        st.line_chart(st.session_state[name].select_dtypes('number'))
+
     def visitConsulta(self, ctx: sqlinterpreterParser.ConsultaContext):
         self.visit(ctx.selection())
         return self.currentState

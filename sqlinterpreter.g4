@@ -1,6 +1,7 @@
 grammar sqlinterpreter;
 root : consulta SEMICOLON   #consult
-     | NAME ASSIGN consulta SEMICOLON #assign                 
+     | NAME ASSIGN consulta SEMICOLON #assign
+     | PLOT NAME SEMICOLON  #plot               
      ;
 
 consulta: selection ;
@@ -45,6 +46,7 @@ AND: 'and';
 OR:'or';
 INNER: 'inner';
 JOIN: 'join';
+PLOT: 'plot';
 ON:'on';
 SUMA: '+';
 MINUS: '-'; 
