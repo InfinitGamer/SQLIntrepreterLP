@@ -28,17 +28,17 @@ class evalVisitor(sqlinterpreterVisitor):
             'or': lambda x, y: x | y
         }
 
-    def visitConsult(self, ctx:sqlinterpreterParser.ConsultContext):
-        df =self.visit(ctx.consulta())
+    def visitConsult(self, ctx: sqlinterpreterParser.ConsultContext):
+        df = self.visit(ctx.consulta())
         st.table(df)
 
-    def visitAssign(self, ctx:sqlinterpreterParser.AssignContext):
-        df =self.visit(ctx.consulta())
+    def visitAssign(self, ctx: sqlinterpreterParser.AssignContext):
+        df = self.visit(ctx.consulta())
         name = ctx.NAME().getText()
         st.session_state[name] = df.copy()
         st.table(df)
 
-    def visitPlot(self, ctx:sqlinterpreterParser.PlotContext):
+    def visitPlot(self, ctx: sqlinterpreterParser.PlotContext):
         name = ctx.NAME().getText()
         st.line_chart(st.session_state[name].select_dtypes('number'))
 
@@ -84,6 +84,19 @@ class evalVisitor(sqlinterpreterVisitor):
 
     def visitNot(self, ctx: sqlinterpreterParser.NotContext):
         return ~self.visit(ctx.condition())
+
+    def visitIsin(self, ctx: sqlinterpreterParser.IsinContext):
+        columna = self.visit(ctx.campo2())
+        print(columna)
+        print("He llegado Aqui")
+        df = evalVisitor().visit(ctx.consulta())
+        l = []
+        for value in columna.values.tolist():
+            if value in df.values:
+                l.append(True)
+            else:
+                l.append(False)
+        return l
 
     def visitParetesis2(self, ctx: sqlinterpreterParser.Paretesis2Context):
         return self.visit(ctx.condition())

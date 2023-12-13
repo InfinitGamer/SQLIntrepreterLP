@@ -17,6 +17,7 @@ where: WHERE condition;
 
 condition: PAROP condition PARCL #paretesis2
          | condition op=(LT|LE|GT|GE|EQ|NEQ) condition #booleanCondition
+         | campo2 IN PAROP consulta PARCL #isin
          | NOT condition #not
          | condition op=AND condition #booleanCondition
          | condition op=OR condition #booleanCondition
@@ -47,6 +48,7 @@ OR:'or';
 INNER: 'inner';
 JOIN: 'join';
 PLOT: 'plot';
+IN: 'in';
 ON:'on';
 SUMA: '+';
 MINUS: '-'; 
