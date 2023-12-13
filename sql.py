@@ -89,16 +89,29 @@ class evalVisitor(sqlinterpreterVisitor):
     def visitString(self, ctx:sqlinterpreterParser.StringContext):
         return ctx.NAME().getText()
     
-
-    def visitTables(self, ctx:sqlinterpreterParser.TablesContext):
+    def visitTable(self, ctx:sqlinterpreterParser.TableContext):
         tabla = ctx.NAME().getText()
 
         path = "./tablas/"
         path = path + tabla + ".csv"
         df = pd.read_csv(path)
+        return df
+    
+    def visitTables(self, ctx:sqlinterpreterParser.TablesContext):
+        df = self.visit(ctx.table())
         
         self.currentState = df
         self.tableForOrder = df.copy()
+        if(ctx.inner()):
+            self.visit(ctx.inner())
+    def visitInner(self, ctx:sqlinterpreterParser.InnerContext):
+        second_table = self.visit(ctx.table())
+        name1 = ctx.NAME(0).getText()
+        name2 = ctx.NAME(1).getText()
+        self.currentState = self.currentState.merge(second_table,left_on=name1, right_on=name2, how='inner')
+        self.tableForOrder = self.currentState.copy()
+        if(ctx.inner()):
+            self.visit(ctx.inner())
     def visitCampos(self, ctx:sqlinterpreterParser.CamposContext):
        nodes = ctx.campo()
        lista = []
