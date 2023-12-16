@@ -1,4 +1,5 @@
-grammar sqlinterpreter;
+grammar pandaQ;
+
 root : consulta SEMICOLON   #consult
      | NAME ASSIGN consulta SEMICOLON #assign
      | PLOT NAME SEMICOLON  #plot               
@@ -27,8 +28,8 @@ condition: PAROP condition PARCL #paretesis2
 
 campo2: MINUS campo2 #minus 
       | PAROP campo2 PARCL #paretesis
-      | campo2 (MUL | DIV) campo2 #mulDiv
-      | campo2 (SUMA | MINUS) campo2 #sumMinus
+      | campo2 op=(MUL | DIV) campo2 #arithmetic
+      | campo2 op=(SUMA | MINUS) campo2 #arithmetic
       | num #numero
       | nombre=(NAME|MUL) #column
 ;
