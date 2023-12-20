@@ -31,7 +31,7 @@ Assegurate de tener les siguientes dependencias instaladas para un funcionamient
 1. Navega hasta el directorio donde esta contenido el proyecto.
 2. Ejecuta el comando `antlr4 -Dlanguage=Python3 -no-listener -visitor pandaQ.g4`.
 3. Ejecuta el comando `streamlit run pandaQ.py`.
-4. Escribe en la ventana que se ha creado, la query a evaluar.
+4. Escribe en la ventana que se ha creado la query a evaluar.
 
 ## Autor
 
