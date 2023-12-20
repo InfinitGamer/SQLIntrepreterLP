@@ -25,7 +25,7 @@ Assegurate de tener les siguientes dependencias instaladas para un funcionamient
 - pip: Gestor de paquetes de Python. Verifica que tengas una versión actualizada instalada.
 - Streamlit: Librería que ofrece un entorno gráfico sencillo de utilizar.
 - Pandas: Libreria que permite tratamiento de datos tabulares.
-
+- Carpeta *tablas* donde se encuentran todas las tablas(ES IMPORTANTE TENERLO ASI PORQUE BUSCARÁ EN ESTE DIRECTORIO TODAS LAS TABLAS).
 ## Instalación
 
 1. Navega hasta el directorio donde esta contenido el proyecto.
