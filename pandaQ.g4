@@ -34,7 +34,7 @@ campo2: MINUS campo2 #minus
       | nombre=(NAME|MUL) #column
 ;
 
-num:op=(SUMA|MINUS)? NUM;
+num:op=(MINUS)? NUM;
 
 LT: '<';
 LE: '<=';

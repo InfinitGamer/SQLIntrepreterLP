@@ -194,9 +194,9 @@ class evalVisitor(pandaQVisitor):
     def visitNum(self, ctx: pandaQParser.NumContext):
         num = ctx.NUM().getText()
         num = float(num)
+
         if (ctx.op):
-            if (ctx.op.text == "-"):
-                num *= -1.0
+            num *= -1.0
         return num
 
     def visitColumn(self, ctx: pandaQParser.ColumnContext):
