@@ -31,6 +31,7 @@ class evalVisitor(pandaQVisitor):
             '+': op.add,
             '-': op.sub,
             '*': op.mul,
+            '/': op.truediv
         }
 
     def visitConsult(self, ctx: pandaQParser.ConsultContext):
@@ -117,8 +118,8 @@ class evalVisitor(pandaQVisitor):
     def visitTable(self, ctx: pandaQParser.TableContext):
         tabla = ctx.NAME().getText()
         try:
-            path = "./tablas/"
-            path = path + tabla + ".csv"
+
+            path = tabla + ".csv"
             df = pd.read_csv(path)
             return df
         except FileNotFoundError as e:
@@ -195,7 +196,7 @@ class evalVisitor(pandaQVisitor):
         num = ctx.NUM().getText()
         num = float(num)
 
-        if (ctx.op):
+        if (ctx.MINUS()):
             num *= -1.0
         return num
 
